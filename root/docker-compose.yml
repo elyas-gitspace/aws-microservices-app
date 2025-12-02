@@ -1,0 +1,53 @@
+# fichier yml qui sert à créer les images de mes services et déployer les conteneurs associé à chacun d'eux
+
+version: "3.9"
+
+services:
+  user-service:
+    build: ./user-service # on construit l'image à partir du dossier ~/user-service qui contient le dockerfile,
+                          # le requirements.txt et mon service app.py
+    container_name: user-service # nom du conteneur qui sera attribué lorsque je ferai docker compose up -d
+                                 # (ce qui va run les images dans un conteneur)
+    ports:
+      - "5000:5000" # le conteneur sera accessible via le port 5000 de ma VM EC2 (mais en réalité 80 car
+                    # j'ai mis un reverse proxy nginx qui redistribue la requête) et l'app écoutera sur le
+                    # port 5000 interne du conteneur
+    networks:
+      - microservices-network # nom du réseau docker sur lequel je run ce conteneur (et tous les autres aussi)
+
+  notifications-service:
+    build: ./notifications-service
+    container_name: notifications-service
+    ports:
+      - "5001:5000"
+    networks:
+      - microservices-network
+
+  analytics-service:
+    build: ./analytics-service
+    container_name: analytics-service
+    ports:
+      - "5002:5000"
+    networks:
+      - microservices-network
+
+  nginx:
+    image: nginx:latest # je choisis la dernière version de l'image nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro # je monte en volume mon fichier de config nginx.conf (qui dicte
+                                                    # les règles d'achemeniment des requêtes vers le bon conteneur
+                                                    # selon le service appelé) dans le conteneurs de nginx
+    depends_on:
+      - user-service
+      - notifications-service
+      - analytics-service # je fais en sorte que l'image et le conteneur de nginx ne soient crée qu'après
+                          # les 3 services
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge

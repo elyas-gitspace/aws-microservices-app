@@ -1,0 +1,52 @@
+# sources sur lesquelles je me suis appuyé pour écrire ce workflow: 
+  # - https://github.com/appleboy/scp-action
+  # - https://github.com/appleboy/ssh-action
+
+
+name: Deployment
+
+on:
+  push: # déclenchement à chaque push sur ma branche main
+    branches:
+      - main
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout de mon repository # copie de tout mon repo sur la vm du workflow GithubActions
+        uses: actions/checkout@v5
+      - name: Copy file via SSH password
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: 22 # port SSH par convention
+          source: "./root/" # le workflow prends tout mes dossiers depuis sa vm
+          target: "/home/ubuntu" # puis les envoi sur mon instance EC2
+
+        #Commandes que le workflow GithubActions va éxecuter dans mon instance EC2 pour relancer la création des conteneurs
+      - name: Deployment commands
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: 22
+          script: |
+            cd /home/ubuntu/
+            docker-compose down
+            docker-compose up -d --build
+
+        #Commandes pour tester les endpoints de mes conteneurs (et surtout le bon fonctionnement du reverse proxy nginx)
+      - name: Test Commands 
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: 22
+          script: |
+            curl -f http://localhost/users
+            curl -f http://localhost/notifications
+            curl -f http://localhost/analytics/stats
