@@ -35,8 +35,9 @@ jobs:
           port: 22
           script: |
             cd /home/ubuntu/
-            docker-compose down
+            docker rm -f nginx user-service notifications-service analytics-service
             docker-compose up -d --build
+
 
         #Commandes pour tester les endpoints de mes conteneurs (et surtout le bon fonctionnement du reverse proxy nginx)
       - name: Test Commands 
