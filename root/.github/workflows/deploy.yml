@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu/
+            cd /home/ubuntu/root/
             docker-compose down || true
             docker rm -f nginx user-service notifications-service analytics-service || true
             docker-compose up -d --build
