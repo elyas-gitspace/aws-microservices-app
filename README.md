@@ -89,6 +89,7 @@ Description : Reverse proxy pour router les requêtes vers les microservices.
 
     /api/analytics/stats
 
+
                     **Déploiement AWS avec Terraform**
 
 Terraform déploie l'infrastructure :
@@ -98,11 +99,13 @@ Terraform déploie l'infrastructure :
 - Paire de clés
 - Rôles IAM
 
+
                             **Pour déployer :**
 
 - cd terraform_deployment/
 - terraform init
 - terraform apply
+
 
                             **Pipeline CI/CD**
 
