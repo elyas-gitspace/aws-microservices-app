@@ -1,20 +1,20 @@
-**AWS Microservices App — Déploiement avec Docker, Nginx, Terraform & GitHub Actions**
+**#AWS Microservices App — Déploiement avec Docker, Nginx, Terraform & GitHub Actions**
 
-**Présentation**
+                                    **Présentation**
 
 Ce projet met en place une architecture microservices complète déployée sur AWS EC2, incluant :
 
-Terraform pour créer l’infrastructure AWS
+- Terraform pour créer l’infrastructure AWS
 
-Docker & Docker Compose pour la conteneurisation
+- Docker & Docker Compose pour la conteneurisation
 
-Nginx comme reverse proxy
+- Nginx comme reverse proxy
 
-GitHub Actions pour un déploiement automatique (CI/CD)
+- GitHub Actions pour un déploiement automatique (CI/CD)
 
-Une instance EC2 Ubuntu pour faire tourner l'application
+- Une instance EC2 Ubuntu pour faire tourner l'application
 
-**Les microservices incluent :**
+                            **Les microservices incluent :**
 
 - User Service
 
@@ -24,8 +24,9 @@ Une instance EC2 Ubuntu pour faire tourner l'application
 
 - Nginx Reverse Proxy (qui intercepte les requêtes et les redirige, afin d'éviter d'exposer les ports de mes services)
 
-**Structure du projet**
+                            **Structure du projet**
 
+```
 aws-microservices-app/
 │
 ├── root/
@@ -58,9 +59,10 @@ aws-microservices-app/
     ├── variables.tf
     ├── outputs.tf
     └── data.tf
+```
 
 
-**Microservices :**
+                            **Microservices :**
 
 **User Service**
 Port : 5001
@@ -79,7 +81,7 @@ Port : 80
 Description : Reverse proxy pour router les requêtes vers les microservices.
 
 
-**Nginx expose les routes :**
+                        **Nginx expose les routes :**
 
     /api/users
 
@@ -87,7 +89,7 @@ Description : Reverse proxy pour router les requêtes vers les microservices.
 
     /api/analytics/stats
 
-**Déploiement AWS avec Terraform**
+                    **Déploiement AWS avec Terraform**
 
 Terraform déploie l'infrastructure :
 
@@ -96,13 +98,13 @@ Terraform déploie l'infrastructure :
  Paire de clés
  Rôles IAM
 
-**Pour déployer :**
+                            **Pour déployer :**
 
 cd terraform_deployment/
 terraform init
 terraform apply
 
-**Pipeline CI/CD**
+                            **Pipeline CI/CD**
 
 Workflow : .github/workflows/deploy.yml
 
