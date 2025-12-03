@@ -9,6 +9,8 @@ on:
   push: # déclenchement à chaque push sur ma branche main
     branches:
       - main
+    paths-ignore:
+      - "README.md"
 jobs:
   deployment:
     runs-on: ubuntu-latest
