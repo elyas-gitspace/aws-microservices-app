@@ -93,16 +93,16 @@ Description : Reverse proxy pour router les requêtes vers les microservices.
 
 Terraform déploie l'infrastructure :
 
- Instance EC2
- Groupe de sécurité
- Paire de clés
- Rôles IAM
+- Instance EC2
+- Groupe de sécurité
+- Paire de clés
+- Rôles IAM
 
                             **Pour déployer :**
 
-cd terraform_deployment/
-terraform init
-terraform apply
+- cd terraform_deployment/
+- terraform init
+- terraform apply
 
                             **Pipeline CI/CD**
 
@@ -110,12 +110,10 @@ Workflow : .github/workflows/deploy.yml
 
 Il effectue :
 
-Connexion SSH à EC2
+- Connexion SSH à EC2
 
-Suppression des anciens conteneurs
+- Suppression des anciens conteneurs
 
-Rebuild des images Docker
+- Rebuild des images Docker
 
-Redémarrage automatique via :
-
-docker-compose up -d --build
+- Redémarrage automatique via : docker-compose up -d --build
